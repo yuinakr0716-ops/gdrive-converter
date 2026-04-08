@@ -224,7 +224,17 @@
 </style>
 </head>
 <body>
-<div class="win">
+<div id="auth-screen" style="display:flex;align-items:center;justify-content:center;height:100vh;background:var(--bg);">
+  <form onsubmit="return checkPw()" style="text-align:center;display:flex;flex-direction:column;gap:10px;align-items:center;">
+    <div style="font-size:12px;color:var(--muted);font-family:var(--mono);">パスワードを入力</div>
+    <input id="pw" type="password" autofocus
+      style="width:200px;padding:8px 10px;font-family:var(--mono);font-size:13px;background:var(--bg2);color:var(--text);border:0.5px solid var(--border2);border-radius:var(--r);outline:none;text-align:center;"
+    >
+    <button type="submit" class="btn btn-primary" style="width:200px;">入る</button>
+    <div id="pw-err" style="font-size:11px;color:var(--err);display:none;">パスワードが違います</div>
+  </form>
+</div>
+<div class="win" id="main-app" style="display:none;">
 
   <!-- Title bar -->
   <div class="titlebar">
@@ -273,6 +283,21 @@
 </div>
 
 <script>
+function checkPw() {
+  if (document.getElementById("pw").value === "h") {
+    document.getElementById("auth-screen").style.display = "none";
+    document.getElementById("main-app").style.display = "flex";
+    sessionStorage.setItem("authed", "1");
+  } else {
+    document.getElementById("pw-err").style.display = "block";
+  }
+  return false;
+}
+if (sessionStorage.getItem("authed") === "1") {
+  document.getElementById("auth-screen").style.display = "none";
+  document.getElementById("main-app").style.display = "flex";
+}
+
 const MEMBERS = [
   { name:"Koki Yui",         initials:"KY", email:"yui.k@fugenlaw.com",             user:"yuikoki",            av:"av-k", tag:"あなた" },
   { name:"Daiki Matsuda",    initials:"DM", email:"daiki.m@fugenlaw.com",            user:"daiki.matsuda",      av:"av-d", tag:null },
